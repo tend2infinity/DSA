@@ -55,28 +55,45 @@ public:
         
         
         //approach 4
-         int duplicate=0;
-        int maxi=0;
-        for(int i=0;i<nums.size(); i++)
-            maxi=max(maxi,nums[i]);
-        int max_set_bits=0;
-        while(maxi){
-            max_set_bits++;
-            maxi=maxi/2;
+        //  int duplicate=0;
+        // int maxi=0;
+        // for(int i=0;i<nums.size(); i++)
+        //     maxi=max(maxi,nums[i]);
+        // int max_set_bits=0;
+        // while(maxi){
+        //     max_set_bits++;
+        //     maxi=maxi/2;
+        // }
+        // for(int bit=0; bit<max_set_bits; bit++){
+        //     int mask=1<<bit;
+        //     int base_count=0;
+        //     int num_count=0;
+        //     for(int i=0; i<nums.size(); i++){
+        //         if(mask&i)
+        //             base_count++;
+        //         if(mask&nums[i])
+        //             num_count++;
+        //     }
+        //     if(num_count>base_count)
+        //         duplicate=duplicate | mask; 
+        // }
+        // return duplicate;
+        
+        
+        
+        //approach 5
+        int turtle=nums[0];
+        int hare= nums[0];
+        do{
+            turtle=nums[turtle];
+            hare=nums[nums[hare]];
+        } while(turtle!=hare);
+        
+        turtle=nums[0];
+        while(turtle!=hare) {
+            turtle=nums[turtle];
+            hare=nums[hare];
         }
-        for(int bit=0; bit<max_set_bits; bit++){
-            int mask=1<<bit;
-            int base_count=0;
-            int num_count=0;
-            for(int i=0; i<nums.size(); i++){
-                if(mask&i)
-                    base_count++;
-                if(mask&nums[i])
-                    num_count++;
-            }
-            if(num_count>base_count)
-                duplicate=duplicate | mask; 
-        }
-        return duplicate;
+        return turtle;
     }
 };

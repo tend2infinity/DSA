@@ -1,0 +1,55 @@
+class Solution {
+public:
+    // int recur(int index, int buy, int cap, vector<int>& prices, vector<vector<vector<int>>>& dp ){
+    //     if(index ==prices.size() )
+    //         return 0;
+    //     if(cap==0)
+    //         return 0;
+    //     if(dp[index][buy][cap]!= -1)
+    //         return dp[index][buy][cap];
+    //     if(buy ==1)
+    //     {
+    //         int profit = -prices[index] + recur(index+1,0,cap,prices,dp);
+    //         int no_profit = recur(index+1,1,cap,prices,dp);
+    //         return dp[index][buy][cap] = max(profit,no_profit);
+    //     }
+    //     else{
+    //         int profit = +prices[index] + recur(index+1,1,cap-1,prices,dp);
+    //         int no_profit = recur(index+1,0,cap,prices,dp);
+    //         return dp[index][buy][cap] = max(profit,no_profit);
+    //     }
+    // }
+    int maxProfit(vector<int>& prices) {
+        vector<vector<vector<int>>> dp(prices.size()+1,vector<vector<int>>(2,vector<int>(3,0)));
+        int n = prices.size();
+        for(int i=0; i<=1; i++){
+            for(int j=0; j<=2; j++){
+                dp[n][i][j] = 0;
+            }
+        }
+        for(int i=0; i<=n; i++){
+            dp[i][0][0] = 0;
+            dp[i][1][0] = 0;
+        }
+        for(int index=n-1; index>=0; index--){
+            for(int buy=0; buy<=1; buy++){
+                for(int cap=1; cap<=2; cap++){
+                    if(buy ==1)
+                        {
+                            int profit = -prices[index] + dp[index+1][0][cap];
+                            int no_profit = dp[index+1][1][cap];
+                             dp[index][buy][cap] = max(profit,no_profit);
+                        }
+                        else{
+                            int profit = +prices[index] + dp[index+1][1][cap-1];
+                            int no_profit = dp[index+1][0][cap];
+                             dp[index][buy][cap] = max(profit,no_profit);
+                        }
+                }
+            }
+        }
+        
+        return dp[0][1][2];
+        // return recur(0,1,2,prices,dp);
+    }
+};

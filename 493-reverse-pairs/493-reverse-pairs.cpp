@@ -5,7 +5,7 @@ public:
         int j = mid+1;
         int count = 0;
         while(i<=mid){
-        while(j<=r && nums[i]> (long long int)2*nums[j]){
+        while(j<=r && nums[i]> 2LL*nums[j]){
                 j++;
             }
             count += j-(mid+1);

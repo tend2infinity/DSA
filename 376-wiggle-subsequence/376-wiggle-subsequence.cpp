@@ -1,7 +1,7 @@
 class Solution {
 public:
     
-    int dp[1005][2];
+
     
 //     int helper(vector<int>& nums, int i, int n, bool flag)
 //     {
@@ -41,12 +41,12 @@ public:
 //         return dp[i][flag] = ans;
 //     }
     
-    int wiggleMaxLength(vector<int>& nums) { 
+    int wiggleMaxLength(vector<int>& nums) {
+        vector<vector<int>> dp(1002,vector<int>(2,0));
         int n = nums.size();
         if(n==0)
             return 0;
         int ans = INT_MIN;
-        memset(dp, 0, sizeof(dp));
         dp[n-1][0] = 1;
         dp[n-1][1] = 1;
         

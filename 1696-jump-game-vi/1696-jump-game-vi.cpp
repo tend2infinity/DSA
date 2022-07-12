@@ -23,13 +23,13 @@ public:
     int maxResult(vector<int>& nums, int k) {
         vector<int> dp(nums.size()+1, 0);
         int size = nums.size()-1;
-        dp[0] = nums[0];
-        multiset <int,greater<int>> S = {dp[0]};
-        for(int index = 1; index<=size; index++){             //jumping backwards
-            if(index>k)
-                S.erase(S.find(dp[index-k-1]));
-            S.insert(dp[index] =  nums[index] + *S.begin());
+        dp[size] = nums[size];
+        multiset <int,greater<int>> S = {dp[size]};
+        for(int index = size-1; index>=0; index--){               //jumping backwards
+            if(index < size-k)
+                S.erase(S.find(dp[index+k+1]));
+            S.insert(dp[index] = nums[index] + *S.begin()); 
         }   
-       return dp[size];
+       return dp[0];
     }
 };

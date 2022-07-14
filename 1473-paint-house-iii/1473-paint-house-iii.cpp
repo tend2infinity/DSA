@@ -1,46 +1,47 @@
 class Solution {
 public:
-    int dp[100][100][21];
-    
-    const int mx = 1e7+1;
-    int f(vector<int>& houses, vector<vector<int>>& cost, int target, int idx, int count, int prev){
-        //base cases
-        if(idx == houses.size()) return count==target ? 0 : mx;
+    int dp[101][101][21];
+    int recur(vector<int>& houses, vector<vector<int>>& cost, int target, int index, int groups, int prev ){
+        //base
+        if(index<0){
+            if(groups == target)
+                return 0;
+            else return 1e8;
+        }
         
-        //memoization
-        if(dp[idx][count][prev]!=-1) return dp[idx][count][prev];
+        if(groups >target)
+            return 1e8;
         
-        int minCost = mx;
-        if(houses[idx]){
-            
-            if(houses[idx]!=prev) minCost = f(houses,cost,target,idx+1,count+1,houses[idx]);
-            
-            else minCost = f(houses,cost,target,idx+1,count,houses[idx]);
-            
-        }else{
-            for(int j=0;j<cost[0].size();j++){
-                int tmp;  
-                
-                if((j+1)!=prev) tmp = cost[idx][j] + f(houses,cost,target,idx+1,count+1,j+1);
-                
-                else tmp = cost[idx][j] + f(houses,cost,target,idx+1,count,j+1);
-                
-                minCost = min(minCost,tmp);
+        if(dp[index][groups][prev]!= -1)
+            return dp[index][groups][prev];
+        
+        int mini = 1e8; 
+        int n = cost[0].size();
+        
+        if(houses[index] == 0){
+            for(int i=1; i<=n; i++){
+                if(prev == i)
+                mini = min(mini, cost[index][i-1] + recur(houses,cost,target,index-1,groups,i));
+                else
+                mini = min(mini, cost[index][i-1] + recur(houses,cost,target,index-1,groups+1,i));
             }
         }
-        return dp[idx][count][prev] = minCost;
+        else{
+            if(prev == houses[index])
+                mini = min(mini, recur(houses,cost,target,index-1,groups,houses[index]) );
+            else
+                mini = min(mini,recur(houses,cost,target,index-1,groups+1,houses[index]) ) ;
+        }
+        return dp[index][groups][prev] = mini;
+        
     }
-    int minCost(vector<int>& houses, vector<vector<int>>& cost, int m, int n, int target) {
-        memset(dp,-1,sizeof(dp));
-        
-        int ans = f(houses,cost,target,0,0,0);
-        
-        //if no solution exist
-        if(ans==mx) return -1;
-        else return ans;
-    }
-            
-
-        
     
+    int minCost(vector<int>& houses, vector<vector<int>>& cost, int m, int n, int target) {
+        memset(dp, -1, sizeof(dp));
+        int ans = recur(houses,cost,target, houses.size()-1,0,0);
+        if(ans == 1e8)
+            return -1;
+        else
+            return ans;
+    }
 };

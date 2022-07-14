@@ -1,49 +1,42 @@
 class Solution {
 public:
-bool makesquare(vector<int>& nums) {
-    int n = nums.size();
+    bool recur(vector<int>& matchsticks, vector<bool>& visited, int index, int k, int sum,      int curr){
+        if(k==1)
+            return true;
 
-    long sum = accumulate(nums.begin(), nums.end(), 0l);
-    if (sum % 4)
-        return false;
-    long sideLen = sum / 4;
-    // need to solve the problem of partitioning nums into four equal subsets each having
-    // sum equal to sideLen
-    vector<int> usedMasks;
-    // validHalfSubsets[i] == true iff the subset represented by bitmask i
-    // has sum == 2*sideLen, AND the subset represented by i can be further partitioned into
-    // two equal subsets. See below for how it is used.
-    vector<bool> validHalfSubsets(1<<n, false);
-
-    // E.g., if n = 5, (1 << 5 - 1) = 11111 represents the whole set
-    int all = (1 << n) - 1;
-    // go through all possible subsets each represented by a bitmask
-    for (int mask = 0; mask <= all; mask++) {
-        long subsetSum = 0;
-        // calculate the sum of this subset
-        for (int i = 0; i < 32; i++) {
-	    if ((mask >> i) & 1)
-		subsetSum += nums[i];
+        if(index >= matchsticks.size()){
+           return false;
         }
-	// if this subset has what we want
-	if (subsetSum == sideLen) {
-	    for (int usedMask : usedMasks) {
-	    // if this mask and usedMask are mutually exclusive
-	        if ((usedMask & mask) == 0) {
-		    // then they form a valid half subset whose sum is 2 * sideLen,
-                    // that can be further partitioned into two equal subsets (usedMask and mask)
-		    int validHalf = usedMask | mask;
-		    validHalfSubsets[validHalf] = true;
-		    // if in the past we concluded that the other half is also a valid
-		    // half subset, DONE!
-		    if (validHalfSubsets[all ^ validHalf])
-		        return true;
-	        }
+
+        if(curr==sum){
+            return recur(matchsticks,visited,0,k-1,sum,0);            
+        }
+        
+        for(int i=index; i<matchsticks.size(); i++){
+            if(!visited[i] && curr + matchsticks[i]<=sum ){
+                visited[i] = true;
+                if (recur(matchsticks,visited,i+1,k,sum,curr+matchsticks[i]))
+                    return true;
+                visited[i] = false;
             }
-	    usedMasks.push_back(mask);
         }
+        return false;
     }
-    return false;
-}
-
+    
+    bool makesquare(vector<int>& matchsticks) {
+        sort(matchsticks.rbegin(),matchsticks.rend());
+        int sum = 0;
+        int maxi =0;
+        for(int i=0; i<matchsticks.size(); i++){
+            sum +=matchsticks[i];
+        }  
+        // to find if we can divide this particular array into 4 subsets having subset sum              equal to sum calculated above
+        int n = matchsticks.size();
+        vector<bool> visited (n,false);
+        if( sum%4==0 ) {
+            int target = sum/4;
+            return recur(matchsticks,visited,0,4,target,0);
+        }
+        return false;      
+    }
 };

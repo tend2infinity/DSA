@@ -20,7 +20,8 @@ public:
                 M={{0,1}};
                 for(int row=0; row<matrix.size(); row++){
                     runningSum += prefix[row][col2] - (col1? prefix[row][col1-1] : 0);
-                    sum+= M[runningSum-target];
+                    if(M[runningSum-target]>0)
+                        sum+= M[runningSum-target];
                     M[runningSum]++;
                 }
             }

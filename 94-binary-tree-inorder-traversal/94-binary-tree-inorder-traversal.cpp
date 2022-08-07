@@ -11,17 +11,25 @@
  */
 class Solution {
 public:
-    vector<int> recur(TreeNode* root, vector<int>& ans){
-        if(root!=NULL){
-            
-            recur(root->left,ans);
-            ans.push_back(root->val);
-            recur(root->right,ans);
-        }
-        return ans;
-    }
+
     vector<int> inorderTraversal(TreeNode* root) {
         vector<int> ans;
-        return recur(root,ans);
+        stack <TreeNode*>S;
+        TreeNode* temp = root;
+        while(true){
+            if(temp!=NULL){
+                S.push(temp);
+                temp = temp->left;
+            }
+            else{
+                if(S.empty())
+                    break;
+                temp = S.top();
+                S.pop();
+                ans.push_back(temp->val);
+                temp = temp -> right;
+            }
+        }
+        return ans;
     }
 };

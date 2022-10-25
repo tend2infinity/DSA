@@ -1,22 +1,25 @@
 class Solution {
 public:
-    void reverseStr(string& str)
-    {
-        int n = str.length();
-
-        // Swap character starting from two
-        // corners
-        for (int i = 0; i < n / 2; i++)
-            swap(str[i], str[n - i - 1]);
-    }
     int countDistinctIntegers(vector<int>& nums) {
-         unordered_set<int> seen;
-        for (int num : nums) {
-            seen.insert(num);
-            string str = to_string(num);
-            reverseStr(str);
-            seen.insert(stoi(str));
+        int s = nums.size();
+        map <int,int> M;
+        string S;
+        for(int i=0; i<s;i++)
+            M[nums[i]]++;
+        
+        
+        for(int i=0; i<s; i++){
+            S = to_string(nums[i]);
+            int size = S.size();
+            for(int i=0; i<size/2; i++){
+                swap(S[i],S[size-1-i]);
+            }
+            M[stoi(S)]++;
+            // if(M[stoi(S)]==0)
+            //     ans++;
+            S.clear();
         }
-        return seen.size();
+        int ans = M.size();
+        return ans;
     }
 };

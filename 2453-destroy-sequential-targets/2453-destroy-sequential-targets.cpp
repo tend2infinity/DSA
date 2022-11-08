@@ -3,12 +3,10 @@ public:
     #define ll long long
     int destroyTargets(vector<int>& nums, int space) {
         map<ll,ll> M;
+        ll maxi=0;
         for(int i=0; i<nums.size(); i++){
             M[nums[i]%space]++;
-        }
-        long long maxi = 0;
-        for(auto m:M){
-            maxi= max(maxi,m.second);
+            maxi = max(maxi,M[nums[i]%space]);
         }
 
         int mini = INT_MAX;

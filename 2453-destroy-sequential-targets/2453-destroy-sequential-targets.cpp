@@ -10,14 +10,10 @@ public:
         for(auto m:M){
             maxi= max(maxi,m.second);
         }
-        vector<ll> V1;
-        for(auto m:M){
-            if(m.second==maxi)
-                V1.push_back(m.first);
-        }
+
         int mini = INT_MAX;
         for(auto x:nums){
-            if( find(V1.begin(),V1.end(),x%space) != V1.end()){
+            if(M[x%space]==maxi){
                 mini = min(mini,x);
             }
         }
